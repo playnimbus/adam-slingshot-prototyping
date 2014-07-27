@@ -16,19 +16,5 @@ public class CameraFollow : MonoBehaviour
         objectPosition.z = transform.position.z;
         Vector3 lerpedPosition = Vector3.Lerp(transform.position, objectPosition, 0.25f);
         transform.position = lerpedPosition;
-
-        //ADDING USELESS CODE FOR GIT TEST
-
-
-        if (true == true)
-        {
-            //hello
-        }
-         
-
-        //blah blah blah
-
-        int hello = 0;
-
     }
 }
