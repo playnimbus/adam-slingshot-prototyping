@@ -6,19 +6,26 @@ public class ShipMovement : MonoBehaviour
 
 	void FixedUpdate () 
 	{
+        ApplyForwardForce();
+
 	    if(Input.GetMouseButton(0))
         {
-            UpdateMovement(Camera.main.ScreenToViewportPoint(Input.mousePosition));        
+            ApplySteeringForce(Camera.main.ScreenToViewportPoint(Input.mousePosition));        
         }
 
         AlignToHeading();
 	}
 
-    void UpdateMovement(Vector3 normalizedScreen)
+    void ApplyForwardForce()
+    {
+        rigidbody2D.AddForce(Vector3.up, ForceMode.Force);
+    }
+
+    void ApplySteeringForce(Vector3 normalizedScreen)
     {
         if(normalizedScreen.y < 0.2f)
         {
-            rigidbody2D.AddForce(Vector2.up, ForceMode.Force);
+            rigidbody2D.AddForce(transform.up, ForceMode.Force);
         }
         else if(normalizedScreen.x < 0.2f)
         {
