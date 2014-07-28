@@ -3,7 +3,8 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour
 {
-    public float steeringPower;
+    public float turningPower;
+    public float turningThrust;
     public float thrustingPower;
 
 	void FixedUpdate () 
@@ -31,13 +32,13 @@ public class ShipMovement : MonoBehaviour
         }
         else if(normalizedScreen.x < 0.2f)
         {
-            rigidbody2D.AddTorque(steeringPower);
-            //rigidbody2D.AddForce(-Vector2.right * steeringPower, ForceMode.Force, Space.Self);
+            rigidbody2D.AddTorque(turningPower);
+            rigidbody2D.AddForce(Vector2.up * turningThrust, ForceMode.Force, Space.Self);
         }
         else if(normalizedScreen.x > 0.8f)
         {
-            rigidbody2D.AddTorque(-steeringPower);
-            //rigidbody2D.AddForce(Vector2.right * steeringPower, ForceMode.Force, Space.Self);
+            rigidbody2D.AddTorque(-turningPower);
+            rigidbody2D.AddForce(Vector2.up * turningThrust, ForceMode.Force, Space.Self);
         }
     }
 
