@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraFollow : MonoBehaviour
 {
     public GameObject objectToFollow;
-    	
+
 	void Update () 
 	{
         UpdatePosition();

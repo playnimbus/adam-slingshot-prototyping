@@ -3,8 +3,13 @@ using System.Collections;
 
 public static class ExtensionMethods
 {
-    public static void AddForce(this Rigidbody2D rigidbody2D, Vector2 force, ForceMode mode = ForceMode.Force)
+    public static void AddForce(this Rigidbody2D rigidbody2D, Vector2 force, ForceMode mode = ForceMode.Force, Space space = Space.World)
     {
+        if(space == Space.Self)
+        {
+            force = rigidbody2D.transform.InverseTransformDirection(force);
+        }
+
         switch (mode)
         {
             case ForceMode.Force:
@@ -22,8 +27,8 @@ public static class ExtensionMethods
         }
     }
 
-    public static void AddForce(this Rigidbody2D rigidbody2D, float x, float y, ForceMode mode = ForceMode.Force)
+    public static void AddForce(this Rigidbody2D rigidbody2D, float x, float y, ForceMode mode = ForceMode.Force, Space space = Space.World)
     {
-        rigidbody2D.AddForce(new Vector2(x, y), mode);
+        rigidbody2D.AddForce(new Vector2(x, y), mode, space);
     }
 }
