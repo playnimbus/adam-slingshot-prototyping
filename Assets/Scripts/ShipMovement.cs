@@ -15,8 +15,6 @@ public class ShipMovement : MonoBehaviour
         {
             ApplySteeringForce(Camera.main.ScreenToViewportPoint(Input.mousePosition));        
         }
-
-        AlignToHeading();
 	}
 
     void ApplyForwardForce()
@@ -40,11 +38,5 @@ public class ShipMovement : MonoBehaviour
             rigidbody2D.AddTorque(-turningPower);
             rigidbody2D.AddForce(Vector2.up * turningThrust, ForceMode.Force, Space.Self);
         }
-    }
-
-    void AlignToHeading()
-    {
-        Vector2 movementHeading = rigidbody2D.velocity;
-        transform.up = movementHeading;
     }
 }
