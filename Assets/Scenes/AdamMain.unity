@@ -87,6 +87,7 @@ GameObject:
   - 124: {fileID: 527591561}
   - 81: {fileID: 527591560}
   - 45: {fileID: 527591566}
+  - 114: {fileID: 527591565}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -157,8 +158,22 @@ Transform:
   m_LocalPosition: {x: 0, y: 8.78497696, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2135607712}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+--- !u!114 &527591565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 527591559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a0934edac5186498ec5c57c88f3feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToFollow: {fileID: 2124164885}
+  lerpAmount: .244000003
+  useFixedUpdate: 1
 --- !u!45 &527591566
 Skybox:
   m_ObjectHideFlags: 0
@@ -196,7 +211,7 @@ Transform:
   - {fileID: 2135607712}
   - {fileID: 2124164886}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!114 &594780648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,12 +223,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2316a15a713aa0540af4d3e9d81f7c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pivot: {fileID: 2135607711}
   ship: {fileID: 2124164885}
-  speed: 25
-  turnAngle: 30
-  planeDistance: 5
-  turnSpeed: 3
+  forwardSpeed: 10
+  maxStrafeSpeed: 20
+  strafeAcceleration: .100000001
 --- !u!1 &663089635
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planetsPrefab: {fileID: 100000, guid: 9334b9b6480e9564782e2715df28c7d5, type: 2}
-  ship: {fileID: 2135607711}
+  ship: {fileID: 2124164885}
 --- !u!4 &663089637
 Transform:
   m_ObjectHideFlags: 0
@@ -254,7 +267,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1148146476
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +451,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1001 &2045613749
 Prefab:
   m_ObjectHideFlags: 0
@@ -572,7 +585,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 527591564}
+  m_Children: []
   m_Father: {fileID: 594780647}
   m_RootOrder: 0

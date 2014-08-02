@@ -3,86 +3,81 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour
 {
-    public GameObject pivot;
+
     public GameObject ship;
+    public float forwardSpeed;
+    public float maxStrafeSpeed;
 
-    public float speed;
+    [Range(0, 1)]
+    public float strafeAcceleration;
 
-    [Range(-90f, 90f)]
-    public float turnAngle;
-
-    // The primary direction the ship will be moving in, in degrees
     private float primaryDirection = 90f;
+    private float strafeSpeed;
 
-    Plane movementPlane;
-
-    [Range(1f, 10f)]
-    public float planeDistance = 3f;
-
-    private float serpAmount = 0f;
-
-    [Range(1f, 10f)]
-    public float turnSpeed = 3f;
-
-    void Start()
+    void FixedUpdate()
     {
-
-    }
-    
-	void FixedUpdate () 
-	{
-	    if(Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0))
         {
             Vector3 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            Steer(viewportPoint);        
+            HandleInput(viewportPoint);
         }
         else
         {
-            Steer(new Vector3(0.5f, 0.5f, 0f));
-        }
+            NoInput();
+        }        
 
-        Move();
-	}
-
-    void Move()
-    {
-        Vector2 normal = new Vector2(Mathf.Cos(Mathf.Deg2Rad * primaryDirection), Mathf.Sin(Mathf.Deg2Rad * primaryDirection));
-
-        pivot.transform.position = (Vector2)pivot.transform.position + normal * speed * Time.fixedDeltaTime;
-        movementPlane.SetNormalAndPosition(normal, (Vector2)pivot.transform.position + normal * planeDistance);
-
-        float movementAngle = primaryDirection + Sinerp(0f, Mathf.Sign(serpAmount) * turnAngle, Mathf.Abs(serpAmount));
-        Vector2 movementDirection = new Vector2(Mathf.Cos(Mathf.Deg2Rad * movementAngle), Mathf.Sin(Mathf.Deg2Rad * movementAngle));
-        Ray ray = new Ray(pivot.transform.position, movementDirection);
-
-        pivot.transform.position = pivot.transform.position + Vector3.right * Mathf.Cos(Mathf.Deg2Rad * movementAngle);
-
-        float distance;
-        if(movementPlane.Raycast(ray, out distance))
-        {
-            Vector3 position = ray.GetPoint(distance);
-            ship.rigidbody2D.MovePosition(position);
-            ship.transform.up = movementDirection;
-        }
+        Move();  
     }
 
-    void Steer(Vector3 viewportPoint)
+    private void HandleInput(Vector3 viewportPoint)
     {
-        if(viewportPoint.x < 0.4f)
+        if(viewportPoint.x < 0.5f)
         {
-            serpAmount += Time.fixedDeltaTime * turnSpeed;
-        }
-        else if(viewportPoint.x > 0.6f)
-        {
-            serpAmount -= Time.fixedDeltaTime * turnSpeed;
+            strafeSpeed = Mathf.Lerp(strafeSpeed, -maxStrafeSpeed, strafeAcceleration);
         }
         else
         {
-            serpAmount = Mathf.MoveTowards(serpAmount, 0f, Time.fixedDeltaTime * turnSpeed);
+            strafeSpeed = Mathf.Lerp(strafeSpeed, maxStrafeSpeed, strafeAcceleration);
         }
 
-        serpAmount = Mathf.Clamp(serpAmount, -1f, 1f);
+        strafeSpeed = Mathf.Clamp(strafeSpeed, -maxStrafeSpeed, maxStrafeSpeed);
     }
+
+    private void NoInput()
+    {
+        strafeSpeed = Mathf.Lerp(strafeSpeed, 0f, strafeAcceleration / 2f);
+    }
+
+    private void Move()
+    {
+        Vector2 forwardAxis = Vector2FromAngle(primaryDirection);
+        Vector2 forwardAmount = forwardAxis * forwardSpeed * Time.fixedDeltaTime;
+
+        Vector2 strafeAxis = Vector2FromAngle(primaryDirection - 90f);
+        Vector2 strafeAmount = strafeAxis * strafeSpeed * Time.fixedDeltaTime;
+
+        Vector2 deltaPosition = forwardAmount + strafeAmount;
+
+        ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + deltaPosition);
+        ship.transform.up = deltaPosition.normalized;
+    }
+
+    private Vector2 Vector2FromAngle(float angle)
+    {
+        return new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle));        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     // *****************************************************
     // From: http://wiki.unity3d.com/index.php?title=Mathfx
