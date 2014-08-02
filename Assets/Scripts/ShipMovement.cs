@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour
 {
-
     public GameObject ship;
     public float forwardSpeed;
     public float maxStrafeSpeed;
@@ -52,13 +51,13 @@ public class ShipMovement : MonoBehaviour
     {
         Vector2 forwardAxis = Vector2FromAngle(primaryDirection);
         Vector2 forwardAmount = forwardAxis * forwardSpeed * Time.fixedDeltaTime;
+        this.transform.position = (Vector2)this.transform.position + forwardAmount;
 
         Vector2 strafeAxis = Vector2FromAngle(primaryDirection - 90f);
         Vector2 strafeAmount = strafeAxis * strafeSpeed * Time.fixedDeltaTime;
+        ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + strafeAmount);
 
         Vector2 deltaPosition = forwardAmount + strafeAmount;
-
-        ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + deltaPosition);
         ship.transform.up = deltaPosition.normalized;
     }
 
