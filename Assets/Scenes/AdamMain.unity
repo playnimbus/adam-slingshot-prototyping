@@ -4549,9 +4549,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ship: {fileID: 2124164885}
-  forwardSpeed: 7
-  maxStrafeSpeed: 14
-  strafeAcceleration: .100000001
+  forwardSpeed: 5
+  maxStrafeSpeed: 10
+  strafeAcceleration: .0500000007
 --- !u!1 &603189915
 GameObject:
   m_ObjectHideFlags: 0
