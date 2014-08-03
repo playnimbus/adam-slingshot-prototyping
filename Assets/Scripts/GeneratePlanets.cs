@@ -6,6 +6,8 @@ public class GeneratePlanets : MonoBehaviour
     public GameObject planetsPrefab;
     public GameObject ship;
 
+    public float gridSize;
+
     private List<GameObject> planetGroups;
     private int shipX, shipY;
 	
@@ -25,15 +27,15 @@ public class GeneratePlanets : MonoBehaviour
             }
         }
 
-        shipX = Mathf.FloorToInt(ship.transform.position.x / 100f);
-        shipY = Mathf.FloorToInt(ship.transform.position.y / 100f);
+        shipX = Mathf.FloorToInt(ship.transform.position.x / gridSize);
+        shipY = Mathf.FloorToInt(ship.transform.position.y / gridSize);
         PlacePlanetsAt(shipX, shipY);
 	}
 
     void Update()
     {
-        int x = Mathf.FloorToInt(ship.transform.position.x / 100f);
-        int y = Mathf.FloorToInt(ship.transform.position.y / 100f);
+        int x = Mathf.FloorToInt(ship.transform.position.x / gridSize);
+        int y = Mathf.FloorToInt(ship.transform.position.y / gridSize);
 
         if(x != shipX || y!= shipY)
         {
@@ -52,8 +54,8 @@ public class GeneratePlanets : MonoBehaviour
         {
             for (int dx = -1; dx <= 1; dx++)
             {
-                position.x = (x + dx) * 100f;
-                position.y = (y + dy) * 100f;
+                position.x = (x + dx) * gridSize;
+                position.y = (y + dy) * gridSize;
                 planetGroups[index].transform.position = position;
                 index++;
             }

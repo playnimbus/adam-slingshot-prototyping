@@ -6,89 +6,89 @@ public class ShipMovement : MonoBehaviour
     public GameObject ship;
     public float forwardSpeed;
     public float maxStrafeSpeed;
+    [Range(0, 1)] public float strafeAcceleration;
 
-    [Range(0, 1)]
-    public float strafeAcceleration;
-
-    private float primaryDirection = 90f;
+    private float movementAngle;
     private float strafeSpeed;
+    private Vector2 primaryDirection;
+    private Vector2 perpindicularDirection;
 
+    public float MovementAngle
+    {
+        get { return movementAngle; }
+        set
+        {
+            movementAngle = value;
+            primaryDirection = Vector2FromAngle(value);
+            perpindicularDirection = PerpindicularVector(primaryDirection);
+        }
+    }
+
+    public Vector2 PrimaryDirection
+    {
+        get { return primaryDirection; }
+    }
+
+    public Vector2 PerpindicularDirection
+    {
+        get { return perpindicularDirection; }
+    }
+
+    public Vector3 Position { get { return ship.transform.position; } }
+   
+    void Start()
+    {
+        MovementAngle = 90f;
+    }
+    
     void FixedUpdate()
     {
-        if(Input.GetMouseButton(0))
-        {
-            Vector3 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            HandleInput(viewportPoint);
-        }
-        else
-        {
-            NoInput();
-        }        
-
+        HandleInput();
         Move();  
     }
 
-    private void HandleInput(Vector3 viewportPoint)
+    private void HandleInput()
     {
-        if(viewportPoint.x < 0.5f)
+        if (Input.GetMouseButton(0))
         {
-            strafeSpeed = Mathf.Lerp(strafeSpeed, -maxStrafeSpeed, strafeAcceleration);
+            Vector3 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+            if (viewportPoint.x < 0.5f)
+            {
+                strafeSpeed = Mathf.Lerp(strafeSpeed, -maxStrafeSpeed, strafeAcceleration);
+            }
+            else
+            {
+                strafeSpeed = Mathf.Lerp(strafeSpeed, maxStrafeSpeed, strafeAcceleration);
+            }
         }
         else
         {
-            strafeSpeed = Mathf.Lerp(strafeSpeed, maxStrafeSpeed, strafeAcceleration);
+            strafeSpeed = Mathf.Lerp(strafeSpeed, 0f, strafeAcceleration);
         }
-
-        strafeSpeed = Mathf.Clamp(strafeSpeed, -maxStrafeSpeed, maxStrafeSpeed);
-    }
-
-    private void NoInput()
-    {
-        strafeSpeed = Mathf.Lerp(strafeSpeed, 0f, strafeAcceleration / 2f);
     }
 
     private void Move()
     {
-        Vector2 forwardAxis = Vector2FromAngle(primaryDirection);
-        Vector2 forwardAmount = forwardAxis * forwardSpeed * Time.fixedDeltaTime;
-        this.transform.position = (Vector2)this.transform.position + forwardAmount;
-
-        Vector2 strafeAxis = Vector2FromAngle(primaryDirection - 90f);
-        Vector2 strafeAmount = strafeAxis * strafeSpeed * Time.fixedDeltaTime;
-        ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + strafeAmount);
-
+        Vector2 forwardAmount = primaryDirection * forwardSpeed * Time.fixedDeltaTime;
+        Vector2 strafeAmount = perpindicularDirection * strafeSpeed * Time.fixedDeltaTime;
         Vector2 deltaPosition = forwardAmount + strafeAmount;
-        ship.transform.up = deltaPosition.normalized;
+
+        ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + deltaPosition);
+        ship.transform.up = deltaPosition;
     }
 
     private Vector2 Vector2FromAngle(float angle)
     {
-        return new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle));        
+        float x = Mathf.Cos(Mathf.Deg2Rad * angle);
+        float y = Mathf.Sin(Mathf.Deg2Rad * angle);
+        return new Vector2(x, y);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // *****************************************************
-    // From: http://wiki.unity3d.com/index.php?title=Mathfx
-    // *****************************************************
-
-    public float Hermite(float start, float end, float value)
+    // Perpindicular vector clockwise
+    private Vector2 PerpindicularVector(Vector2 direction)
     {
-        return Mathf.Lerp(start, end, value * value * (3.0f - 2.0f * value));
+        return new Vector2(direction.y, -direction.x);
     }
 
-    public static float Sinerp(float start, float end, float value)
-    {
-        return Mathf.Lerp(start, end, Mathf.Sin(value * Mathf.PI * 0.5f));
-    }
 }
