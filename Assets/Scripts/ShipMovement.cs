@@ -1,47 +1,46 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
-public class ShipMovement : MonoBehaviour
+[Serializable]
+public class ShipMovement
 {
-    public GameObject ship;
     public float forwardSpeed;
     public float maxStrafeSpeed;
     [Range(0, 1)] public float strafeAcceleration;
 
-    private float movementAngle;
+    private Ship ship;
+    private float _movementAngle;
     private float strafeSpeed;
-    private Vector2 primaryDirection;
-    private Vector2 perpindicularDirection;
+    private Vector2 _forwardDirection;
+    private Vector2 _perpindicularDirection;
 
-    public float MovementAngle
+    public float movementAngle
     {
-        get { return movementAngle; }
+        get { return _movementAngle; }
         set
         {
-            movementAngle = value;
-            primaryDirection = Vector2FromAngle(value);
-            perpindicularDirection = PerpindicularVector(primaryDirection);
+            _movementAngle = value;
+            _forwardDirection = Vector2FromDegrees(value);
+            _perpindicularDirection = PerpindicularVector(_forwardDirection);
         }
     }
 
-    public Vector2 PrimaryDirection
+    public Vector2 forwardDirection
     {
-        get { return primaryDirection; }
+        get { return _forwardDirection; }
     }
 
-    public Vector2 PerpindicularDirection
+    public Vector2 perpindicularDirection
     {
-        get { return perpindicularDirection; }
+        get { return _perpindicularDirection; }
     }
 
-    public Vector3 Position { get { return ship.transform.position; } }
-   
-    void Start()
+    public void SetShip(Ship ship)
     {
-        MovementAngle = 90f;
+        this.ship = ship;
     }
     
-    void FixedUpdate()
+    public void Update()
     {
         HandleInput();
         Move();  
@@ -70,18 +69,23 @@ public class ShipMovement : MonoBehaviour
 
     private void Move()
     {
-        Vector2 forwardAmount = primaryDirection * forwardSpeed * Time.fixedDeltaTime;
-        Vector2 strafeAmount = perpindicularDirection * strafeSpeed * Time.fixedDeltaTime;
+        Vector2 forwardAmount = _forwardDirection * forwardSpeed * Time.fixedDeltaTime;
+        Vector2 strafeAmount = _perpindicularDirection * strafeSpeed * Time.fixedDeltaTime;
         Vector2 deltaPosition = forwardAmount + strafeAmount;
 
         ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + deltaPosition);
         ship.transform.up = deltaPosition;
     }
 
-    private Vector2 Vector2FromAngle(float angle)
+    private Vector2 Vector2FromDegrees(float degrees)
     {
-        float x = Mathf.Cos(Mathf.Deg2Rad * angle);
-        float y = Mathf.Sin(Mathf.Deg2Rad * angle);
+        return Vector2FromRadians(Mathf.Deg2Rad * degrees);
+    }
+
+    private Vector2 Vector2FromRadians(float radians)
+    {
+        float x = Mathf.Cos(radians);
+        float y = Mathf.Sin(radians);
         return new Vector2(x, y);
     }
 
