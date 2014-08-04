@@ -4,7 +4,7 @@ using System.Collections;
 public class ShipPointAndClickMovement : MonoBehaviour {
 
     public float ShipVelocity;
-    Vector3 directionToTravel = Vector3.up;
+    public Vector3 directionToTravel = Vector3.up;
     Vector3 mouseWorldPoint = Vector3.zero;
 
 
@@ -23,7 +23,7 @@ public class ShipPointAndClickMovement : MonoBehaviour {
             directionToTravel = new Vector3(directionToTravel.x, directionToTravel.y, 0);
         }
         gameObject.transform.LookAt(directionToTravel + gameObject.transform.position);
-        gameObject.transform.position += (directionToTravel * ShipVelocity) * Time.deltaTime;
-
+ //       gameObject.transform.position += (directionToTravel * ShipVelocity) * Time.deltaTime;
+        gameObject.rigidbody2D.MovePosition( gameObject.transform.position + (directionToTravel * ShipVelocity) * Time.deltaTime);
 	}
 }
