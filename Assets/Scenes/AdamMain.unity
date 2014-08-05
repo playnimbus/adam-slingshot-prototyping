@@ -3881,6 +3881,9 @@ MonoBehaviour:
     shipLerpAmount: .100000001
     shipLeadDistance: 4
     cameraHeight: -10
+  planetCamera:
+    planet: {fileID: 0}
+    cameraHeight: -15
   ship: {fileID: 0}
 --- !u!45 &527591566
 Skybox:
@@ -9065,7 +9068,7 @@ GameObject:
   - 114: {fileID: 1470717055}
   - 50: {fileID: 1470717056}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9138,8 +9141,8 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1470717050}
-  m_Mass: 1
-  m_LinearDrag: 0
+  m_Mass: 10
+  m_LinearDrag: 1e+06
   m_AngularDrag: .0500000007
   m_GravityScale: 1
   m_FixedAngle: 0
@@ -13692,6 +13695,8 @@ MonoBehaviour:
     forwardSpeed: 5
     maxStrafeSpeed: 10
     strafeAcceleration: .0500000007
+  orbit:
+    orbitSpeed: -120
 --- !u!1 &2132861840
 GameObject:
   m_ObjectHideFlags: 0

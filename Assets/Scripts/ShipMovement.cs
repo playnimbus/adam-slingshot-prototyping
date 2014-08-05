@@ -13,6 +13,7 @@ public class ShipMovement
     private float strafeSpeed;
     private Vector2 _forwardDirection;
     private Vector2 _perpindicularDirection;
+    private float speedModifier;
 
     public float movementAngle
     {
@@ -20,8 +21,9 @@ public class ShipMovement
         set
         {
             _movementAngle = value;
-            _forwardDirection = Vector2FromDegrees(value);
-            _perpindicularDirection = PerpindicularVector(_forwardDirection);
+            _forwardDirection = HelperMethods.Vector2FromDegrees(value);
+            _perpindicularDirection = HelperMethods.PerpindicularVector(_forwardDirection);
+            speedModifier = 1f;
         }
     }
 
@@ -44,6 +46,11 @@ public class ShipMovement
     {
         HandleInput();
         Move();  
+    }
+
+    public void ReduceSpeed()
+    {
+        speedModifier *= 0.75f;
     }
 
     private void HandleInput()
@@ -69,30 +76,11 @@ public class ShipMovement
 
     private void Move()
     {
-        Vector2 forwardAmount = _forwardDirection * forwardSpeed * Time.fixedDeltaTime;
-        Vector2 strafeAmount = _perpindicularDirection * strafeSpeed * Time.fixedDeltaTime;
+        Vector2 forwardAmount = _forwardDirection * forwardSpeed * speedModifier * Time.fixedDeltaTime;
+        Vector2 strafeAmount = _perpindicularDirection * strafeSpeed * speedModifier * Time.fixedDeltaTime;
         Vector2 deltaPosition = forwardAmount + strafeAmount;
 
         ship.rigidbody2D.MovePosition((Vector2)ship.transform.position + deltaPosition);
         ship.transform.up = deltaPosition;
     }
-
-    private Vector2 Vector2FromDegrees(float degrees)
-    {
-        return Vector2FromRadians(Mathf.Deg2Rad * degrees);
-    }
-
-    private Vector2 Vector2FromRadians(float radians)
-    {
-        float x = Mathf.Cos(radians);
-        float y = Mathf.Sin(radians);
-        return new Vector2(x, y);
-    }
-
-    // Perpindicular vector clockwise
-    private Vector2 PerpindicularVector(Vector2 direction)
-    {
-        return new Vector2(direction.y, -direction.x);
-    }
-
 }
